@@ -10,6 +10,7 @@ router.post('/addpost', async (req, res) =>{
     question: req.body.question,
     user: req.body.user,
     topic: req.body.topic,
+    profileimage: req.body.profileimage
   });
     const savedPost = await post.save();
     res.send(post);

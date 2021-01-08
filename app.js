@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
   }));
-
+app.use(express.static('uploads'));
 //Import Routes
 const authRoute = require ('./routes/auth'); 
 const profileRoute = require ('./routes/profile');

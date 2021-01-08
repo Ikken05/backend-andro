@@ -14,6 +14,10 @@ const PostSchema = new mongoose.Schema({
         type: String,  
         required: true
       },
+    profileimage:{
+        type:String,
+        
+    },
 
     topic:{
       type:String,
