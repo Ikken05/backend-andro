@@ -19,7 +19,14 @@ const FieldSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    
+    Worker:[{Fullname:{
+        type:String,
+        required:true
+    },
+    Role:{
+        type:String,
+        required:true
+    }}],
     
     Material:[{
         type:String,

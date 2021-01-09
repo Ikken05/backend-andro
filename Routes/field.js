@@ -20,9 +20,10 @@ router.post('/addfield', async (req,res)=>{
         
         
         
-        Material : req.body.Type,
+        Material : req.body.Material,
+        Worker : req.body.Worker,
         
-        creator: req.body.username,
+        creator: req.body.creator,
 
         Address: req.body.Address
         

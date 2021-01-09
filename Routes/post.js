@@ -4,6 +4,8 @@ const Comment = require('../model/Comments');
 const Upvote = require('../model/Upvote');
 const Downvote = require('../model/Downvote');
 
+
+
 router.post('/addpost', async (req, res) =>{
     
     const post = new Post({ 
@@ -13,6 +15,7 @@ router.post('/addpost', async (req, res) =>{
     profileimage: req.body.profileimage
   });
     const savedPost = await post.save();
+    res.json({savedPost})
     res.send(post);
 });
 
@@ -30,7 +33,7 @@ router.post('/addcomment', async (req,res)=>{
   
   try{
       const savedComment = await NewComment.save();
-      res.json(savedComment)
+      res.json({savedComment})
       console.log(req.body)
   }catch(err){
       res.status(400).send(err);
@@ -44,7 +47,7 @@ router.get('/allposts',async(req,res)=>{
 
 
       const post = await Post.find().sort({_id:-1});
-      res.json(post);
+      res.json({post});
       console.log(post); 
   }catch(err){
       res.json({message : err});
@@ -58,7 +61,7 @@ router.post('/onepost',async(req,res)=>{
 
 
       const post = await Post.findById(req.body.id);
-      res.json(post);
+      res.json({post});
       console.log(post); 
   }catch(err){
       res.json({message : err});
@@ -69,7 +72,7 @@ router.post('/onepost',async(req,res)=>{
 router.get('/allpostcomments/:postid', async(req,res)=>{
   try{
       const postcomments = await Comment.find({postid: req.params.postid});
-      res.json(postcomments); 
+      res.json({postcomments}); 
       console.log(postcomments);
   }catch(err){
       res.json({message : err});
@@ -92,7 +95,7 @@ router.post('/addupvote', async (req,res)=>{
     res.status(400).send('You removed your upvote'); 
   }else
   { const savedUpvote = await upvote.save();
-    res.json(savedUpvote);
+    res.json({savedUpvote});
     console.log(req.body)
   }
 });
@@ -105,15 +108,21 @@ router.post('/adddownvote', async (req,res)=>{
       postid: req.body.postid,
       userdownvote:req.body.userdownvote
       
-  }); 
+  });
+  const upvoteExist = await Upvote.findOne({ userupvote: req.body.userupvote,postid : req.body.postid }); 
   const downvoteExist = await Downvote.findOne({ userdownvote: req.body.userdownvote,postid : req.body.postid });
   if (downvoteExist) {
     downvoteExist.remove({_id:downvoteExist._id});
     res.json(deletedDownvote);  
-  }else
+  }
+  if(upvoteExist){
+    res.json('you cannot upvote and downvote a post')
+    
+  }
+  else
   {
     const savedDownvote = await downvote.save();
-    res.json(savedDownvote);
+    res.json({savedDownvote});
     console.log(req.body)
   }
 });
