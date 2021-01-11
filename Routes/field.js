@@ -3,13 +3,14 @@ const mongoose = require('mongoose');
 const Field = require('../model/Field');
 const { schema } = require('../model/Field');
 const User = require('../model/User');
+const Address = require('../model/Address');
 
 
 
 
 router.post('/addfield', async (req,res)=>{
 
-    const foundcreator = await User.findOne({username: req.body.username});
+    //const foundcreator = await User.findOne({username: req.params.creator});
     const field = new Field ({
         
         dimensions : req.body.dimensions,
@@ -23,9 +24,9 @@ router.post('/addfield', async (req,res)=>{
         Material : req.body.Material,
         Worker : req.body.Worker,
         
-        creator: req.body.creator,
+        Creator: req.body.Creator,
 
-        Address: req.body.Address
+       Address: req.body.Address
         
         
     }); 
@@ -45,11 +46,25 @@ router.post('/addfield', async (req,res)=>{
 
 });
 
+router.post('/generateaddress/:Addresstxt',async(req,res)=>{
+    const address = new Address ({
+        Addresstxt: req.params.Addresstxt
+    });
+    try {
+        const savedaddress = await address.save();
+        res.json(savedaddress);
+        console.log(savedaddress);
+    } catch (error) {
+        
+    }
 
-router.get('/showuserfields',async (req,res)=>{
+});
+
+
+router.get('/showuserfields/:creator',async (req,res)=>{
     try{
-        const foundField = await Field.find({creator:req.body.username});
-        res.json({foundField});
+        const foundField = await Field.find({creator:req.body.creator});
+        res.json(foundField);
         console.log({foundField});
     }catch(error){
         res.json({message:error});
@@ -106,10 +121,10 @@ router.get('/count',async (req,res)=>{
     }
 });
 
-router.post('/deletefield', async (req,res)=>{
+router.post('/deletefield/:id', async (req,res)=>{
   
     try{
-      const deletedfield = await Field.findByIdAndDelete(req.body.id); 
+      const deletedfield = await Field.findByIdAndRemove(req.params.id); 
       res.json({deletedfield});
     }catch(err){
   

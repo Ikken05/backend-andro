@@ -29,7 +29,8 @@ const UserSchema = new mongoose.Schema({
         default: '/uploads/sponge_homer.jpg'
     },
     phone :{
-        type:Number
+        type:Number,
+        default: '00000000'
     },
     
 });

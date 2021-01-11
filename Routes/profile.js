@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const multer = require('multer');
+const Post = require('../model/Post');
 const User = require('../model/User');
 const { schema } = require('../model/User');
+const Notification = require('../model/Notification');
 //const upload = multer({dest: './uploads'});
 
 // Set Multer Storage Engine
@@ -52,6 +54,15 @@ router.post("/updateuser", async (req, res) => {
           phone: user.phone,
         }
       });
+
+    const posts = await Post.update({user:user.username},
+      {$set:{
+        profileimage: user.profileimage
+      }},{ multi: true})
+    const notification = await Notification.update({username:user.username},
+        {$set:{
+          profileimage: user.profileimage
+        }},{ multi: true})
     res.json( user)
     console.log({updateUser})
   } catch (err) {

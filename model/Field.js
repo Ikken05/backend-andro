@@ -13,27 +13,27 @@ const FieldSchema = new mongoose.Schema({
     
     ReadyTime:{
         type:Number,
-        required:true
     },
     TypeName:{
         type:String,
-        required:true
     },
     Worker:[{Fullname:{
         type:String,
-        required:true
     },
     Role:{
         type:String,
-        required:true
     }}],
     
     Material:[{
-        type:String,
-        required:true
-    }],
+        Type:{
+            type:String,
+    }}],
     Creator:{
         type: String,
+    },
+    Date:{
+        type: Date,
+        default:Date.now
     },
     Address:{
         type:String,
@@ -48,10 +48,10 @@ const FieldSchema = new mongoose.Schema({
             index : '2dsphere'
           },
         formattedAddress : String 
-    }
+    
 
 
-});
+}});
 //geocoder  & create location
 FieldSchema.pre('save',async function (next) {
     const loc = await geocoder.geocode(this.Address);
